@@ -2479,6 +2479,7 @@ typedef int socket_t;
  */
 
 struct gps_data_t {
+    int status;
     gps_mask_t set;     /* has field been set since this was last cleared? */
 #define ONLINE_SET      (1llu<<1)
 #define TIME_SET        (1llu<<2)

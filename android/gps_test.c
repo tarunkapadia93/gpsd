@@ -57,7 +57,7 @@ int main (int argc, char **argv) {
                     printf("H Accuracy: %f\n", gps_data.fix.eph);
                     printf("S Accuracy: %f\n", gps_data.fix.eps);
                     printf("B Accuracy: %f\n", gps_data.fix.epd);
-                    printf("Time: %ld\n", (long) gps_data.fix.time);
+                    printf("Time: %f\n", (double)(gps_data.fix.time.tv_sec) + ((double)(gps_data.fix.time.tv_nsec) / 1e9));
                     printf("Altitude: %f\n", gps_data.fix.altitude);
                     printf("V Accuracy: %f\n\n", gps_data.fix.epv);
                 }
@@ -94,8 +94,8 @@ int main (int argc, char **argv) {
                            "Azimuth: %d, Used: %d\n",
                             gps_data.skyview[i].svid,
                             (int)gps_data.skyview[i].ss,
-                            gps_data.skyview[i].elevation,
-                            gps_data.skyview[i].azimuth,
+                            (int)gps_data.skyview[i].elevation,
+                            (int)gps_data.skyview[i].azimuth,
                             gps_data.skyview[i].used);
                 }
             }

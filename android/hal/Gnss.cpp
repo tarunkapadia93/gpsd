@@ -51,6 +51,7 @@ Return<bool> Gnss::start() {
         long last_recorded_fix = 0;
         char dtos[100];
         GnssLocation location;
+	long gps_time = (double)(gps_data.fix.time.tv_sec) + ((double)(gps_data.fix.time.tv_nsec) / 1e9);
 
         // Normally, GPSd will be running on localhost, but we can set a system property
         // "service.gpsd.host" to some other hostname in order to open a GPSd instance
@@ -105,8 +106,8 @@ Return<bool> Gnss::start() {
                     if (gps_data.status >= 1 && gps_data.fix.mode >= 2){
 
                         // Every 30 seconds, store current coordinates to persist property.
-                        if (is_automotive && ((long) gps_data.fix.time) > last_recorded_fix + 30){
-                            last_recorded_fix = (long) gps_data.fix.time;
+                        if (is_automotive && gps_time > last_recorded_fix + 30){
+                            last_recorded_fix = gps_time;
                             sprintf(dtos, "%lf", gps_data.fix.latitude);
                             property_set("persist.service.gpsd.latitude", dtos);
                             sprintf(dtos, "%lf", gps_data.fix.longitude);
@@ -129,7 +130,7 @@ Return<bool> Gnss::start() {
                                  .horizontalAccuracyMeters = (float) gps_data.fix.eph,
                                  .speedAccuracyMetersPerSecond = (float) gps_data.fix.eps,
                                  .bearingAccuracyDegrees = (float) gps_data.fix.epd,
-                                 .timestamp = (long) gps_data.fix.time
+                                 .timestamp = gps_time
                         };
 
                         if (gps_data.fix.mode == 3){
